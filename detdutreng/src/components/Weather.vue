@@ -109,7 +109,7 @@ const locateMe = async () => {
 
         <div class="card  border-light shadow p-3 mb-5 rounded cards" style="height: 100%; flex-direction: row;">
 
-          <img :src="'/src/assets/weather/' + icon_weather +'.svg'" style="width: 20%;"  alt='ds'  />
+          <img :src="'img/weather/' + icon_weather +'.svg'" style="width: 20%;"  alt='ds'  />
           <div>
           <h5 class="mb-0 text-dark">
 
