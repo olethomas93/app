@@ -1,0 +1,167 @@
+
+<script setup lang="ts" >
+import { onMounted, ref, } from 'vue';
+
+const API_URL = "https://api.met.no/weatherapi/locationforecast/2.0/compact";
+
+
+const WeatherForecast = ref()
+const weatherNow =ref()
+const icon_weather =ref()
+const location = ref()
+const gettingLocation = ref(false)
+const errorStr = ref()
+
+
+onMounted(async () => {
+  await locateMe();
+  await fetchData(location.value.coords);
+});
+
+
+
+
+const fetchData = async (pos: any) => {
+  const url1 = `${API_URL}?lat=${pos.latitude}&lon=${pos.longitude}`;
+  
+  WeatherForecast.value = await (await fetch(url1,{"headers":{"User-Agent":"TestApp Theisen"}})).json();
+
+  console.log(WeatherForecast.value);
+  let millis = Date.now()
+console.log(new Date().toISOString());
+
+ parseWeatherData(WeatherForecast.value)
+
+  return true;
+
+}
+const parseWeatherData = (weatherForecast: any) => {
+
+  weatherNow.value = weatherForecast.properties.timeseries[0].data.instant.details
+
+  
+  icon_weather.value =  weatherForecast.properties.timeseries[0].data.next_1_hours.summary.symbol_code
+
+ 
+
+}
+
+const  getImgUrl =()=>{
+
+  return `../assets/weather/${icon_weather.value}.svg`
+}
+const getLocation = async () => {
+  return new Promise((resolve, reject) => {
+    if (!("geolocation" in navigator)) {
+      reject(new Error("Geolocation is not available."));
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos: GeolocationPosition) => {
+        resolve(pos);
+      },
+      (err) => {
+        reject(err);
+      }
+    );
+  });
+}
+
+const handleTime = (dataD: Date) => {
+  let data = new Date(dataD)
+  let hrs = data.getHours()
+  let mins = data.getMinutes()
+  let hour = hrs.toString()
+  let minute = mins.toString()
+  if (hrs <= 9)
+    hour = '0' + hrs
+  if (mins < 10)
+    minute = '0' + mins
+  const postTime = hour + ':' + minute
+  return postTime
+}
+const locateMe = async () => {
+  gettingLocation.value = true;
+  try {
+    gettingLocation.value = false;
+    location.value = await getLocation();
+  } catch (e: any) {
+    gettingLocation.value = false;
+    errorStr.value = e.message;
+  }
+
+  finally {
+    return true
+  }
+}
+
+
+</script>
+
+<template>
+
+
+  <div class="container-fluid">
+
+
+    <div class="row">
+      <div class="col-sm">
+
+        <div class="card  border-light shadow p-3 mb-5 rounded cards" style="height: 100%; flex-direction: row;">
+
+          <img :src="'/src/assets/weather/' + icon_weather +'.svg'" style="width: 20%;"  alt='ds'  />
+          <div>
+          <h5 class="mb-0 text-dark">
+
+          Været nå
+
+          </h5>
+
+
+
+          <div class="card-body mb-1 text-dark" style="color:white;" v-if="weatherNow" >
+            {{weatherNow.air_temperature  }}C&#xb0;
+          </div>
+
+</div>
+        </div>
+      </div>
+
+
+   
+
+    </div>
+  </div>
+
+
+
+</template>
+
+<style>
+.aligncolumn {
+  display: flex;
+  align-items: center;
+  align-content: stretch;
+  flex-direction: row-reverse;
+
+
+}
+
+.widget {
+  padding-top: 5%;
+}
+
+.cards{
+
+ 
+}
+
+.card-body{
+  font-weight: bold;
+}
+.card-title{
+
+  font-family: sans-serif;
+  font-weight: bold;
+}
+</style>
