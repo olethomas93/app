@@ -30,14 +30,47 @@ const fetchData = async (pos: any) => {
   let millis = Date.now()
 console.log(new Date().toISOString());
 
+
+
  parseWeatherData(WeatherForecast.value)
 
   return true;
 
 }
-const parseWeatherData = (weatherForecast: any) => {
 
-  weatherNow.value = weatherForecast.properties.timeseries[0].data.instant.details
+const getIndex= (timeseries:Array<any> )=>{
+
+  if(timeseries == null) {
+    return
+  }
+  let index =0;
+let closest = timeseries[0].time;
+let now = new Date()
+
+for(let i =0;i<24;i++){
+
+let date = new Date(timeseries[i].time)
+
+let diff = now -date
+
+if(Math.abs(diff)<Math.abs(closest-now)){
+  closest = timeseries[i].time
+  index = i
+
+}
+
+
+}
+console.log(closest);
+
+return index
+
+}
+const parseWeatherData = (weatherForecast: any) => {
+ let index =getIndex(weatherForecast.properties.timeseries)
+
+
+  weatherNow.value = weatherForecast.properties.timeseries[index].data.instant.details
 
   
   icon_weather.value =  weatherForecast.properties.timeseries[0].data.next_1_hours.summary.symbol_code
@@ -46,10 +79,7 @@ const parseWeatherData = (weatherForecast: any) => {
 
 }
 
-const  getImgUrl =()=>{
 
-  return `../assets/weather/${icon_weather.value}.svg`
-}
 const getLocation = async () => {
   return new Promise((resolve, reject) => {
     if (!("geolocation" in navigator)) {
@@ -107,7 +137,7 @@ const locateMe = async () => {
     <div class="row">
       <div class="col-sm">
 
-        <div class="card  border-light shadow p-3 mb-5 rounded cards" style="height: 100%; flex-direction: row;">
+        <div class="card border-light shadow-lg p-3 mb-5 rounded-lg cards" style="height: 100%; flex-direction: row;">
 
           <img :src="'img/weather/' + icon_weather +'.svg'" style="width: 20%;"  alt='ds'  />
           <div>
@@ -153,7 +183,16 @@ const locateMe = async () => {
 
 .cards{
 
- 
+background: #f0f0f0
+}
+
+h5{
+  font-family: 'Roboto Slab', sans-serif;
+
+}
+
+.card{
+  border-radius: 4%;
 }
 
 .card-body{

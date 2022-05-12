@@ -98,7 +98,7 @@ const locateMe = async () => {
     <div class="row">
       <div class="col-sm">
 
-        <div class="card  border-light shadow p-3 mb-5 rounded cards" style="height: 100%; flex-direction: row;">
+        <div class="card  border-light shadow-lg p-3 mb-5 rounded" style="height: 100%; flex-direction: row;">
 
           <img src="../assets/tide.svg" style="width: 30%;" />
           <div>
@@ -120,7 +120,7 @@ const locateMe = async () => {
 
       <div class="col-sm">
 
-        <div class="card border-light shadow p-3 mb-5 rounded cards" style="height: 100%; flex-direction: row;">
+        <div class="card border-light shadow-lg p-3 mb-5 rounded " style="height: 100%; flex-direction: row;">
 
           <img src="../assets/tideup.svg" style="width: 30%;" />
           <div>
@@ -136,7 +136,7 @@ const locateMe = async () => {
       </div>
       <div class="col-sm">
 
-        <div class="card  border-light shadow p-3 mb-5  rounded cards" style="height: 100%; flex-direction: row;">
+        <div class="card  border-light shadow-lg p-3 mb-5  rounded " style="height: 100%; flex-direction: row;">
 
 
           
