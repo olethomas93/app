@@ -38,22 +38,22 @@ console.log(new Date().toISOString());
 
 }
 
-const getIndex= (timeseries:Array<any> )=>{
+const  getIndex= (timeseries:Array<any> )=>{
 
   if(timeseries == null) {
     return
   }
-  let index =0;
+let index:number =0;
 let closest = timeseries[0].time;
 let now = new Date()
 
-for(let i =0;i<24;i++){
+for(let i:number =0;i<24;i++){
 
 let date = new Date(timeseries[i].time)
 
-let diff = now -date
+let diff = +now - +date
 
-if(Math.abs(diff)<Math.abs(closest-now)){
+if(Math.abs(diff)<Math.abs(closest- +now)){
   closest = timeseries[i].time
   index = i
 
@@ -67,7 +67,7 @@ return index
 
 }
 const parseWeatherData = (weatherForecast: any) => {
- let index =getIndex(weatherForecast.properties.timeseries)
+ var index:any =getIndex(weatherForecast.properties.timeseries)
 
 
   weatherNow.value = weatherForecast.properties.timeseries[index].data.instant.details
