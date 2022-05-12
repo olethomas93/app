@@ -10,8 +10,30 @@ let mymap;
 
  onMounted(async()=>{
 
+const Turruter =
+leaflet.tileLayer.wms('https://openwms.statkart.no/skwms1/wms.friluftsruter2?', {
+  layers:'Fotrute',
 
+     transparent: true,
+  format: "image/png",
+  attribution: "NVE"
+})
 
+const bolgevarsel =
+leaflet.tileLayer.wms('https://geo.barentswatch.no/geoserver/bw/ows?', {
+  layers:'waveforecast_area_iso_latest',
+     transparent: true,
+  format: "image/png",
+  attribution: "NVE"
+})
+
+const laksekart =
+leaflet.tileLayer.wms(' https://laksekartogc.fylkesmannen.no/wms.ashx?', {
+  layers:'layer_53',
+     transparent: true,
+  format: "image/png",
+  attribution: "NVE"
+})
 
 const Vindkraft = leaflet.tileLayer.wms('https://nve.geodataonline.no/arcgis/services/Vindkraft2/MapServer/WmsServer?', {
   layers:'Vindkraft_utbygd',
@@ -29,7 +51,7 @@ const bratthet =leaflet.tileLayer.wms('https://nve.geodataonline.no/arcgis/servi
 })
 
 
-var norgeskart =leaflet.tileLayer("https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=kartdata3&zoom={z}&x={x}&y={y}",
+var norgeskart =leaflet.tileLayer("https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4graatone&zoom={z}&x={x}&y={y}",
 {
       opacity: 0.7,
     maxZoom: 19,
@@ -47,7 +69,10 @@ var baseMaps ={
 
 var overlay ={
   "bratt":bratthet,
-  "Vindkraft":Vindkraft
+  "Vindkraft":Vindkraft,
+  "Bølgevarsel":bolgevarsel,
+  "laksekart":laksekart,
+  "turruter":Turruter
 }
 mymap = leaflet.map("mapid",{
   layers:[norgeskart]
