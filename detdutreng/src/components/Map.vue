@@ -11,12 +11,50 @@ let mymap;
  onMounted(async()=>{
 
 
-mymap = leaflet.map("mapid").setView([42.5145, -83.0147], 9);
 
-leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(mymap);
 
+const Vindkraft = leaflet.tileLayer.wms('https://nve.geodataonline.no/arcgis/services/Vindkraft2/MapServer/WmsServer?', {
+  layers:'Vindkraft_utbygd',
+     transparent: true,
+  format: "image/png",
+  attribution: "NVE"
+})
+
+
+const bratthet =leaflet.tileLayer.wms('https://nve.geodataonline.no/arcgis/services/Bratthet/MapServer/WmsServer?', {
+  layers:'Bratthet_snoskred',
+     transparent: true,
+  format: "image/png",
+  attribution: "NVE"
+})
+
+
+var norgeskart =leaflet.tileLayer("https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=kartdata3&zoom={z}&x={x}&y={y}",
+{
+      opacity: 0.7,
+    maxZoom: 19,
+    detectRetina: true,
+    attribution:
+    '&copy; <a href="https://www.kartverket.no/">Kartverket</a>',
+
+
+
+})
+
+var baseMaps ={
+  "norgeskart":norgeskart
+}
+
+var overlay ={
+  "bratt":bratthet,
+  "Vindkraft":Vindkraft
+}
+mymap = leaflet.map("mapid",{
+  layers:[norgeskart]
+})
+
+mymap.locate({ setView: true, maxZoom: 10 });
+var layerControl = leaflet.control.layers(baseMaps, overlay).addTo(mymap);
    await locateMe();
 
 
